@@ -3,10 +3,10 @@ import express from "express";
 import cors from "cors";
 import http from "http";
 import dotenv from "dotenv";
-import connectDB from "./src/config/db.js";
 import colors from "colors";
 import morgan from "morgan";
 
+import connectDB from "./src/config/db.js";
 import testRoutes from "./src/routes/testRoutes.js";
 
 //Dot ENV config
@@ -15,7 +15,9 @@ dotenv.config();
 // mongodb connection
 connectDB();
 
+// rest object
 const app = express();
+
 // middlewares
 app.use(express.json());
 app.use(cors());
