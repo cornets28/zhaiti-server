@@ -1,6 +1,6 @@
 import userModel from "../models/user.model.js";
 
-const registerController = async (req, res, next) => {
+export const registerController = async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
   const existingUser = await userModel.findOne({ email });
 
@@ -42,16 +42,41 @@ const registerController = async (req, res, next) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-    //   sex: user.sex,
-    //   dob: user.dob,
-    //   address: user.address,
-    //   image_url: user.image_url,
-    //   nationality: user.nationality,
-    //   role: user.role,
-    //   occupation: user.occupation,
+      //   sex: user.sex,
+      //   dob: user.dob,
+      //   address: user.address,
+      //   image_url: user.image_url,
+      //   nationality: user.nationality,
+      //   role: user.role,
+      //   occupation: user.occupation,
     },
     token,
   });
 };
 
-export default registerController;
+export const loginController = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  //validation
+  if (!email || !password) {
+    next("Please provide all fields");
+  }
+  //find user by email
+  const user = await userModel.findOne({ email }).select("+password");
+  if (!user) {
+    next("Invalid username or password");
+  }
+  //compare password
+  const isMatch = await user.comparePassword(password);
+  if (!isMatch) {
+   return next("Invalid username or password");
+  }
+  user.password = undefined;
+  const token = await user.createJWT();
+  res.status(200).json({
+    success: true,
+    message: "Login Successfully",
+    user,
+    token,
+  });
+};
