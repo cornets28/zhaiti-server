@@ -5,9 +5,11 @@ import http from "http";
 import dotenv from "dotenv";
 import colors from "colors";
 import morgan from "morgan";
+import "express-async-errors";
 
 import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/auth.routes.js";
+import errorMiddleware from "./src/middlewares/errorMiddleware.js";
 
 //Dot ENV config
 dotenv.config();
@@ -18,13 +20,20 @@ connectDB();
 // rest object
 const app = express();
 
+
 // middlewares
 app.use(express.json());
+
 app.use(cors());
 app.use(morgan("dev"));
 
+
 // routes
 app.use("/api/v1/auth", authRoutes);
+
+// validation middleware
+app.use(errorMiddleware);
+
 // port
 const PORT = process.env.PORT || 5000;
 const server = http.createServer(app);
