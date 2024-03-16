@@ -8,6 +8,7 @@ import morgan from "morgan";
 
 import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/auth.routes.js";
+import errorMiddleware from "./src/middlewares/errorMiddleware.js";
 
 //Dot ENV config
 dotenv.config();
@@ -22,6 +23,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
+
+// validation middleware
+app.use(errorMiddleware);
 
 // routes
 app.use("/api/v1/auth", authRoutes);
