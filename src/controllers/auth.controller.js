@@ -72,6 +72,7 @@ export const loginController = async (req, res, next) => {
    return next("Invalid username or password");
   }
   user.password = undefined;
+  
   const token = await user.createJWT();
   res.status(200).json({
     success: true,
