@@ -9,7 +9,7 @@ import "express-async-errors";
 
 import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/auth.routes.js";
-import errorMiddleware from "./src/middlewares/errorMiddleware.js";
+import errorMiddleware from "./src/middlewares/error.middleware.js";
 
 //Dot ENV config
 dotenv.config();
