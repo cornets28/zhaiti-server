@@ -3,7 +3,9 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 import JWT from "jsonwebtoken";
 
-const userSchema = new mongoose.Schema(
+const { Schema } = mongoose;
+
+const userSchema = new Schema(
   {
     firstName: {
       type: String,
@@ -17,60 +19,52 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Email is required"],
       unique: true,
-      validate: validator.isEmail,
+      validate: [validator.isEmail, "Invalid email address"],
     },
     password: {
       type: String,
       required: [true, "Password is required"],
       minLength: [8, "Password must be at least 8 characters"],
-      select: true,
+      select: false,
     },
     sex: {
       type: String,
       enum: ["Male", "Female", "Other"],
     },
-    dob: {
-      type: Date,
-    },
-    address: {
-      type: String,
-    },
-    image_url: {
-      type: String,
-    },
-    nationality: {
-      type: String,
-    },
+    dob: Date,
+    address: String,
+    imageUrl: String,
+    nationality: String,
     role: {
       type: String,
       enum: ["USER", "ADMIN", "SUPER_ADMIN"],
       default: "USER",
     },
-    occupation: {
-      type: Array,
-    },
+    occupation: [String],
   },
   { timestamps: true }
 );
 
-// middelwares
+// Middleware to hash password before saving
 userSchema.pre("save", async function () {
-  if (!this.isModified) return;
+  if (!this.isModified("password")) return;
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-//compare password
+// Method to compare password
 userSchema.methods.comparePassword = async function (userPassword) {
-  const isMatch = await bcrypt.compare(userPassword, this.password);
-  return isMatch;
+  return bcrypt.compare(userPassword, this.password);
 };
 
-// Json web token
-userSchema.methods.createJWT = async function () {
+// Method to create JWT
+userSchema.methods.createJWT = function () {
   return JWT.sign({ userId: this._id }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };
 
-export default mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+export default User;
