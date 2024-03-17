@@ -10,6 +10,7 @@ import "express-async-errors";
 import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import errorMiddleware from "./src/middlewares/error.middleware.js";
+import userRoutes from "./src/routes/user.routes.js"
 
 //Dot ENV config
 dotenv.config();
@@ -30,6 +31,7 @@ app.use(morgan("dev"));
 
 // routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/user", userRoutes);
 
 // validation middleware
 app.use(errorMiddleware);

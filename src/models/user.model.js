@@ -25,28 +25,30 @@ const userSchema = new mongoose.Schema(
       minLength: [8, "Password must be at least 8 characters"],
       select: true,
     },
-    // sex: {
-    //   type: String,
-    // },
-    // dob: {
-    //   type: String,
-    // },
-    // address: {
-    //   type: String,
-    // },
-    // image_url: {
-    //   type: String,
-    // },
-    // nationality: {
-    //   type: String,
-    // },
-    // role: {
-    //   type: String,
-    //   default: "SIMPLE",
-    // },
-    // occupation: {
-    //   type: Array,
-    // },
+    sex: {
+      type: String,
+      enum: ["Male", "Female", "Other"],
+    },
+    dob: {
+      type: Date,
+    },
+    address: {
+      type: String,
+    },
+    image_url: {
+      type: String,
+    },
+    nationality: {
+      type: String,
+    },
+    role: {
+      type: String,
+      enum: ["USER", "ADMIN", "SUPER_ADMIN"],
+      default: "USER",
+    },
+    occupation: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );
