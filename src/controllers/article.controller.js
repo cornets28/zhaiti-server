@@ -21,10 +21,19 @@ export const createArticleController = async (req, res, next) => {
 };
 
 // ======= GET ARTICLES BY USER =========
-export const getAllArticlesController = async (req, res, next) => {
+export const getUserArticlesController = async (req, res, next) => {
   const articles = await articleModel.find({ createdBy: req.user.userId });
   res.status(200).json({
     totalArticles: articles.length,
     articles,
   });
 };
+
+// ======= GET ARTICLES BY USER =========
+export const getAllArticlesController = async (req, res, next) => {
+    const articles = await articleModel.find();
+    res.status(200).json({
+      totalArticles: articles.length,
+      articles,
+    });
+  };
