@@ -28,6 +28,10 @@ const articleSchema = new Schema(
       type: String,
     //   required: [true, "Image is required"],
     },
+    authors: {
+        type: [String],
+        required: [true, "Author is required"],
+      },
     categories: {
       type: [String],
       required: [true, "Categories is required"],
