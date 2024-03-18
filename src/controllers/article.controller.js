@@ -46,7 +46,7 @@ export const updateArticlesController = async (req, res, next) => {
   if (!title || !subtitle || !description || !image || !authors) {
     next("Please Provide All Fields");
   }
-  //find job
+  //find article
   const article = await articleModel.findOne({ _id: id });
   //validation
   if (!article) {
@@ -69,3 +69,22 @@ if (req.user.userId !== article.createdBy.toString()
   //res
   res.status(200).json({ updateArticle });
 };
+
+
+// ======= DELETE ARTICLE ===========
+export const deleteArticleController = async (req, res, next) => {
+    const { id } = req.params;
+    //find job
+    const article = await articleModel.findOne({ _id: id });
+    //validation
+    if (!article) {
+      next(`No article Found with this id ${id}.`);
+    }
+    if (!req.user.userId === article.createdBy.toString()) {
+      next("Your not authorize to delete this article!");
+      return;
+    }
+    await article.deleteOne();
+    res.status(200).json({ message: "Article Deleted successfully!" });
+  };
+  

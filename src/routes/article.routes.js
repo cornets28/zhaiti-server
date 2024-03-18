@@ -3,7 +3,8 @@ import {
   createArticleController,
   getAllArticlesController,
   getUserArticlesController,
-  updateArticlesController
+  updateArticlesController,
+  deleteArticleController
 } from "../controllers/article.controller.js";
 import userAuth from "../middlewares/auth.middleware.js";
 
@@ -19,7 +20,11 @@ router.get("/get-articles", userAuth, getAllArticlesController);
 // GET USER ARTICLES || GET
 router.get("/user/get-articles", userAuth, getUserArticlesController);
 
-//UPDATE ARTICLE ||  PATCH || PUT
+// UPDATE ARTICLE ||  PATCH || PUT
 router.patch("/update-article/:id", userAuth, updateArticlesController);
+
+// DELETE ARTICLE || DELETE
+router.delete("/delete-article/:id", userAuth, deleteArticleController);
+
 
 export default router;
