@@ -8,7 +8,7 @@ const filename =  path.join(path.dirname(new URL(import.meta.url).pathname), "ar
 export const createArticlesFromJson = async () => {
  
   try {
-    await mongoose.connect("mongodb+srv://Samy:MyPassword@cluster0.soiroik.mongodb.net/zhaitinewsdata")
+    await mongoose.connect(process.env.MONGODB_URL)
     const jsonData = fs.readFileSync(filename, "utf8");
     const articles = JSON.parse(jsonData);
     const existingArticles = JSON.parse(jsonData);
