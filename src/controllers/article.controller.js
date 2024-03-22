@@ -33,17 +33,29 @@ export const getUserArticlesController = async (req, res, next) => {
   if (status && status !== "all") {
     queryObject.status = status;
   }
-  // if (workType && workType !== "all") {
-  //   queryObject.workType = workType;
-  // }
+
   if (search) {
-    queryObject.position = { $regex: search, $options: "i" };
+    queryObject.title = { $regex: search, $options: "i" };
   }
 
   let queryResult = articleModel.find(queryObject);
+
+  //sorting
+  if (sort === "latest") {
+    queryResult = queryResult.sort("-createdAt");
+  }
+  if (sort === "oldest") {
+    queryResult = queryResult.sort("createdAt");
+  }
+  if (sort === "a-z") {
+    queryResult = queryResult.sort("title");
+  }
+  if (sort === "z-a") {
+    queryResult = queryResult.sort("-title");
+  }
+
   const articles = await queryResult;
 
-  //   const articles = await articleModel.find({ createdBy: req.user.userId });
   res.status(200).json({
     totalArticles: articles.length,
     articles,
