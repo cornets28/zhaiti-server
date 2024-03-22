@@ -24,14 +24,45 @@ export const createArticleController = async (req, res, next) => {
 
 // ======= GET ARTICLES BY USER =========
 export const getUserArticlesController = async (req, res, next) => {
-  const articles = await articleModel.find({ createdBy: req.user.userId });
+  const { status, search, sort } = req.query;
+  //conditions for searching filters
+  const queryObject = {
+    createdBy: req.user.userId,
+  };
+  //logic filters
+  if (status && status !== "all") {
+    queryObject.status = status;
+  }
+
+  if (search) {
+    queryObject.title = { $regex: search, $options: "i" };
+  }
+
+  let queryResult = articleModel.find(queryObject);
+
+  //sorting
+  if (sort === "latest") {
+    queryResult = queryResult.sort("-createdAt");
+  }
+  if (sort === "oldest") {
+    queryResult = queryResult.sort("createdAt");
+  }
+  if (sort === "a-z") {
+    queryResult = queryResult.sort("title");
+  }
+  if (sort === "z-a") {
+    queryResult = queryResult.sort("-title");
+  }
+
+  const articles = await queryResult;
+
   res.status(200).json({
     totalArticles: articles.length,
     articles,
   });
 };
 
-// ======= GET ARTICLES BY USER =========
+// ======= GET ARTICLES =========
 export const getAllArticlesController = async (req, res, next) => {
   const articles = await articleModel.find();
   res.status(200).json({
@@ -43,6 +74,7 @@ export const getAllArticlesController = async (req, res, next) => {
 // ======= UPDATE ARTICLE =========
 export const updateArticlesController = async (req, res, next) => {
   const { id } = req.params;
+
   const { title, subtitle, description, image, authors } = req.body;
   //validation
   if (!title || !subtitle || !description || !image || !authors) {
@@ -55,9 +87,11 @@ export const updateArticlesController = async (req, res, next) => {
     next(`No article found with this id ${id}`);
   }
 
+  console.log("req.user.userRole :", req.user.userRole);
+
   if (
-    req.user.userId !== article.createdBy.toString()
-    // || req.user.role !== "SUPER_ADMIN"
+    req.user.userRole !== "SUPER_ADMIN" ||
+    req.user.userId == article.createdBy.toString()
   ) {
     return next("You are not authorized to update this article");
   }
@@ -69,20 +103,22 @@ export const updateArticlesController = async (req, res, next) => {
       runValidators: true,
     }
   );
-  //res
   res.status(200).json({ updateArticle });
 };
 
 // ======= DELETE ARTICLE ===========
 export const deleteArticleController = async (req, res, next) => {
   const { id } = req.params;
-  //find job
+  //find article
   const article = await articleModel.findOne({ _id: id });
   //validation
   if (!article) {
     next(`No article Found with this id ${id}.`);
   }
-  if (!req.user.userId === article.createdBy.toString()) {
+  if (
+    req.user.userRole !== "SUPER_ADMIN" ||
+    !req.user.userId === article.createdBy.toString()
+  ) {
     next("Your not authorize to delete this article!");
     return;
   }
