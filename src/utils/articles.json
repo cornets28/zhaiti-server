@@ -1,0 +1,107 @@
+[
+  {
+    "_id": "65fccae1d248b2dc479cd1bc",
+    "title": "Title 1",
+    "subtitle": "Subtitle 1",
+    "status": "UNREAD",
+    "description": "Description 1",
+    "image": "www.example.com/image1",
+    "categories": [
+      "category1",
+      "category2"
+    ],
+    "readCount": 0,
+    "createdBy": "65f5f23ba71afc3c5ad899cb",
+    "createdAt": "2024-03-22T00:03:45.331Z",
+    "updatedAt": "2024-03-22T00:03:45.337Z",
+    "__v": 0,
+    "authors": [
+      "Author 1",
+      "Author 2"
+    ]
+  },
+  {
+    "_id": "65fccae1d248b2dc479cd1bd",
+    "title": "Title 2",
+    "subtitle": "Subtitle 2",
+    "status": "UNREAD",
+    "description": "Description 2",
+    "image": "www.example.com/image2",
+    "categories": [
+      "category2",
+      "category3"
+    ],
+    "readCount": 0,
+    "createdBy": "65f5f23ba71afc3c5ad899cb",
+    "createdAt": "2024-03-22T00:03:45.337Z",
+    "updatedAt": "2024-03-22T00:03:45.337Z",
+    "__v": 0,
+    "authors": [
+      "Author 2",
+      "Author 3"
+    ]
+  },
+  {
+    "_id": "65fccae1d248b2dc479cd1be",
+    "title": "Title 3",
+    "subtitle": "Subtitle 3",
+    "status": "UNREAD",
+    "description": "Description 3",
+    "image": "www.example.com/image3",
+    "categories": [
+      "category3",
+      "category4"
+    ],
+    "readCount": 0,
+    "createdBy": "65f5f23ba71afc3c5ad899cb",
+    "createdAt": "2024-03-22T00:03:45.337Z",
+    "updatedAt": "2024-03-22T00:03:45.337Z",
+    "__v": 0,
+    "authors": [
+      "Author 3",
+      "Author 4"
+    ]
+  },
+  {
+    "_id": "65fccae1d248b2dc479cd1bf",
+    "title": "Title 4",
+    "subtitle": "Subtitle 4",
+    "status": "UNREAD",
+    "description": "Description 4",
+    "image": "www.example.com/image4",
+    "categories": [
+      "category4",
+      "category5"
+    ],
+    "readCount": 0,
+    "createdBy": "65f5f23ba71afc3c5ad899cb",
+    "createdAt": "2024-03-22T00:03:45.337Z",
+    "updatedAt": "2024-03-22T00:03:45.337Z",
+    "__v": 0,
+    "authors": [
+      "Author 4",
+      "Author 5"
+    ]
+  },
+  {
+    "_id": "65fccae1d248b2dc479cd1c0",
+    "title": "Title 5",
+    "subtitle": "Subtitle 5",
+    "status": "UNREAD",
+    "description": "Description 5",
+    "image": "www.example.com/image5",
+    "categories": [
+      "category5",
+      "category6"
+    ],
+    "readCount": 0,
+    "createdBy": "65f5f23ba71afc3c5ad899cb",
+    "createdAt": "2024-03-22T00:03:45.337Z",
+    "updatedAt": "2024-03-22T00:03:45.337Z",
+    "__v": 0,
+    "authors": [
+      "Author 5",
+      "Author 6"
+    ]
+  }
+]

@@ -12,6 +12,7 @@ import authRoutes from "./src/routes/auth.routes.js";
 import errorMiddleware from "./src/middlewares/error.middleware.js";
 import userRoutes from "./src/routes/user.routes.js";
 import articleRoutes from "./src/routes/article.routes.js"
+import { createArticlesFromJson } from "./src/utils/seed-articles.js"
 
 //Dot ENV config
 dotenv.config();
@@ -28,6 +29,8 @@ app.use(express.json());
 
 app.use(cors());
 app.use(morgan("dev"));
+
+// createArticlesFromJson()
 
 
 // routes
