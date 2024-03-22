@@ -4,7 +4,8 @@ import {
   getAllArticlesController,
   getUserArticlesController,
   updateArticlesController,
-  deleteArticleController
+  deleteArticleController,
+  articleStatsController
 } from "../controllers/article.controller.js";
 import userAuth from "../middlewares/auth.middleware.js";
 
@@ -25,6 +26,9 @@ router.patch("/update-article/:id", userAuth, updateArticlesController);
 
 // DELETE ARTICLE || DELETE
 router.delete("/delete-article/:id", userAuth, deleteArticleController);
+
+// ARTICLES STATS AND FILTER|| GET
+router.get("/article-stats", userAuth, articleStatsController);
 
 
 export default router;

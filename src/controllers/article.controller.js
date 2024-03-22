@@ -1,4 +1,6 @@
 import articleModel from "../models/article.model.js";
+import mongoose from "mongoose";
+import moment from "moment";
 
 // ======= CREATE ARTICLE =========
 export const createArticleController = async (req, res, next) => {
@@ -53,9 +55,10 @@ export const updateArticlesController = async (req, res, next) => {
     next(`No article found with this id ${id}`);
   }
 
-if (req.user.userId !== article.createdBy.toString() 
+  if (
+    req.user.userId !== article.createdBy.toString()
     // || req.user.role !== "SUPER_ADMIN"
-    ) {
+  ) {
     return next("You are not authorized to update this article");
   }
   const updateArticle = await articleModel.findOneAndUpdate(
@@ -70,21 +73,80 @@ if (req.user.userId !== article.createdBy.toString()
   res.status(200).json({ updateArticle });
 };
 
-
 // ======= DELETE ARTICLE ===========
 export const deleteArticleController = async (req, res, next) => {
-    const { id } = req.params;
-    //find job
-    const article = await articleModel.findOne({ _id: id });
-    //validation
-    if (!article) {
-      next(`No article Found with this id ${id}.`);
-    }
-    if (!req.user.userId === article.createdBy.toString()) {
-      next("Your not authorize to delete this article!");
-      return;
-    }
-    await article.deleteOne();
-    res.status(200).json({ message: "Article Deleted successfully!" });
+  const { id } = req.params;
+  //find job
+  const article = await articleModel.findOne({ _id: id });
+  //validation
+  if (!article) {
+    next(`No article Found with this id ${id}.`);
+  }
+  if (!req.user.userId === article.createdBy.toString()) {
+    next("Your not authorize to delete this article!");
+    return;
+  }
+  await article.deleteOne();
+  res.status(200).json({ message: "Article Deleted successfully!" });
+};
+
+// =======  ARTICLES STATS & FILTERS ===========
+export const articleStatsController = async (req, res) => {
+  const stats = await articleModel.aggregate([
+    // search by user articles
+    {
+      $match: {
+        createdBy: new mongoose.Types.ObjectId(req.user.userId),
+      },
+    },
+    {
+      $group: {
+        _id: "$status",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  //default stats
+  const defaultStats = {
+    unread: stats.UNREAD || 0,
+    read: stats.READ || 0,
+    save: stats.SAVE || 0,
   };
-  
+
+  //monthly yearly stats
+  let monthlyApplication = await articleModel.aggregate([
+    {
+      $match: {
+        createdBy: new mongoose.Types.ObjectId(req.user.userId),
+      },
+    },
+    {
+      $group: {
+        _id: {
+          year: { $year: "$createdAt" },
+          month: { $month: "$createdAt" },
+        },
+        count: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+  monthlyApplication = monthlyApplication
+    .map((item) => {
+      const {
+        _id: { year, month },
+        count,
+      } = item;
+      const date = moment()
+        .month(month - 1)
+        .year(year)
+        .format("MMM Y");
+      return { date, count };
+    })
+    .reverse();
+  res
+    .status(200)
+    .json({ totalArticle: stats.length, defaultStats, monthlyApplication });
+};
