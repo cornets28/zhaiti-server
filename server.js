@@ -1,3 +1,4 @@
+// packages import
 import express from "express";
 import cors from "cors";
 import http from "http";
@@ -5,7 +6,14 @@ import dotenv from "dotenv";
 import colors from "colors";
 import morgan from "morgan";
 import "express-async-errors";
+// security
+import helmet from "helmet";
+import xss from "xss-clean";
+import mongoSanitize from "express-mongo-sanitize";
+
+// file import
 import connectDB from "./src/config/db.js";
+// routes import
 import authRoutes from "./src/routes/auth.routes.js";
 import errorMiddleware from "./src/middlewares/error.middleware.js";
 import userRoutes from "./src/routes/user.routes.js";
@@ -21,6 +29,9 @@ connectDB();
 const app = express();
 
 // middlewares
+app.use(helmet());
+app.use(xss());
+app.use(mongoSanitize());
 app.use(express.json());
 
 app.use(cors());
