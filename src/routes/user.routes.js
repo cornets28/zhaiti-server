@@ -10,7 +10,7 @@ const router = express.Router();
 // routes
 
 // GET USER DATA || POST
-router.post("/getUser", userAuth, getUserController);
+router.get("/get-user", userAuth, getUserController);
 
 // UPDATE USER DATA || PuT
 router.put("/update-user", userAuth, updateUserController);
