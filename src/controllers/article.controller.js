@@ -77,55 +77,55 @@ export const getUserArticlesController = async (req, res, next) => {
 
 // ======= GET ARTICLES =========
 export const getAllArticlesController = async (req, res, next) => {
-    const { status, search, sort } = req.query;
+  const { status, search, sort } = req.query;
 
-    // conditions for searching filters
-    const queryObject = {
-      createdBy: req.user.userId,
-    };
-    //logic filters
-    if (status && status !== "all") {
-      queryObject.status = status;
-    }
-  
-    if (search) {
-      queryObject.title = { $regex: search, $options: "i" };
-    }
-  
-    let queryResult = articleModel.find();
-  
-    // sorting
-    if (sort === "latest") {
-      queryResult = queryResult.sort("-createdAt");
-    }
-    if (sort === "oldest") {
-      queryResult = queryResult.sort("createdAt");
-    }
-    if (sort === "a-z") {
-      queryResult = queryResult.sort("title");
-    }
-    if (sort === "z-a") {
-      queryResult = queryResult.sort("-title");
-    }
-  
-    // pagination
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-  
-    queryResult = queryResult.skip(skip).limit(limit);
-  
-    // articles count
-    const totalArticles = await articleModel.countDocuments(queryResult);
-    const numOfPage = Math.ceil(totalArticles / limit);
-  
-    const articles = await queryResult;
-  
-    res.status(200).json({
-      totalArticles,
-      articles,
-      numOfPage,
-    });
+  // conditions for searching filters
+  const queryObject = {
+    createdBy: req.user.userId,
+  };
+  //logic filters
+  if (status && status !== "all") {
+    queryObject.status = status;
+  }
+
+  if (search) {
+    queryObject.title = { $regex: search, $options: "i" };
+  }
+
+  let queryResult = articleModel.find();
+
+  // sorting
+  if (sort === "latest") {
+    queryResult = queryResult.sort("-createdAt");
+  }
+  if (sort === "oldest") {
+    queryResult = queryResult.sort("createdAt");
+  }
+  if (sort === "a-z") {
+    queryResult = queryResult.sort("title");
+  }
+  if (sort === "z-a") {
+    queryResult = queryResult.sort("-title");
+  }
+
+  // pagination
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  queryResult = queryResult.skip(skip).limit(limit);
+
+  // articles count
+  const totalArticles = await articleModel.countDocuments(queryResult);
+  const numOfPage = Math.ceil(totalArticles / limit);
+
+  const articles = await queryResult;
+
+  res.status(200).json({
+    totalArticles,
+    articles,
+    numOfPage,
+  });
 };
 
 // ======= UPDATE ARTICLE =========
@@ -243,3 +243,4 @@ export const articleStatsController = async (req, res) => {
     .status(200)
     .json({ totalArticle: stats.length, defaultStats, monthlyApplication });
 };
+
